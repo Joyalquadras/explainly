@@ -1,0 +1,2476 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Explainly API",
+        "description": "Turn YouTube videos into beginner-friendly learning experiences.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "security": [
+        {
+            "bearer": []
+        }
+    ],
+    "paths": {
+        "/api/history/{analysisId}/progress": {
+            "put": {
+                "tags": [
+                    "Learning history"
+                ],
+                "operationId": "progress",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProgressUpdate"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Progress"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{analysisId}/notes": {
+            "get": {
+                "tags": [
+                    "Notes"
+                ],
+                "operationId": "get",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoteDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Notes"
+                ],
+                "operationId": "save",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SaveNoteRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoteDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/youtube/connect": {
+            "post": {
+                "tags": [
+                    "YouTube"
+                ],
+                "summary": "Start the Google OAuth flow to connect a YouTube account",
+                "operationId": "connect",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/videos/analyze": {
+            "post": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "summary": "Submit a YouTube URL for analysis (asynchronous)",
+                "operationId": "analyze",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AnalyzeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SubmitResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/quizzes/{quizId}/attempts": {
+            "get": {
+                "tags": [
+                    "Quizzes"
+                ],
+                "operationId": "attempts",
+                "parameters": [
+                    {
+                        "name": "quizId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AttemptSummary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Quizzes"
+                ],
+                "operationId": "submit",
+                "parameters": [
+                    {
+                        "name": "quizId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SubmitAttemptRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AttemptResult"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/bookmarks": {
+            "get": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "operationId": "list",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 20
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PageResponseBookmarkDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateBookmarkRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookmarkDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Create an account (upgrades the current guest session if present)",
+                "operationId": "register",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "operationId": "refresh",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "operationId": "logout",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "operationId": "login",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/guest": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Start a guest session with limited daily usage",
+                "operationId": "guest",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/google": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign in with a Google ID token",
+                "operationId": "google",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GoogleSignInRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{id}/transcript": {
+            "get": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "operationId": "transcript",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TranscriptView"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "summary": "Provide transcript text when it could not be fetched automatically",
+                "operationId": "submitTranscript",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TranscriptTextRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{id}/transcript/upload": {
+            "post": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "summary": "Upload a transcript or caption file (.txt, .srt, .vtt)",
+                "operationId": "uploadTranscript",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "file"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{id}/transcript/audio": {
+            "post": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "summary": "Upload audio you have the right to use; it is transcribed with the configured speech-to-text provider",
+                "operationId": "uploadAudio",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "file"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{id}/retry": {
+            "post": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "operationId": "retry",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{analysisId}/quiz": {
+            "get": {
+                "tags": [
+                    "Quizzes"
+                ],
+                "summary": "Latest quiz for the video (204 when none has been generated yet)",
+                "operationId": "latest",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuizDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Quizzes"
+                ],
+                "summary": "Generate a new quiz from the video content",
+                "operationId": "generate",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/QuizDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{analysisId}/notes/reset": {
+            "post": {
+                "tags": [
+                    "Notes"
+                ],
+                "operationId": "reset",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoteDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{analysisId}/flashcards": {
+            "get": {
+                "tags": [
+                    "Flashcards"
+                ],
+                "operationId": "list_1",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/FlashcardDto"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Flashcards"
+                ],
+                "operationId": "generate_1",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/FlashcardDto"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{analysisId}/chat": {
+            "get": {
+                "tags": [
+                    "AI chat"
+                ],
+                "operationId": "history",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/MessageDto"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "AI chat"
+                ],
+                "summary": "Ask a question about the video; answers cite video timestamps",
+                "operationId": "ask",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AskRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MessageDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "AI chat"
+                ],
+                "operationId": "clear",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/users/me": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "operationId": "me",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "operationId": "delete",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "operationId": "update",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateProfileRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/youtube/validate": {
+            "get": {
+                "tags": [
+                    "YouTube"
+                ],
+                "summary": "Validate a YouTube URL and preview its public metadata",
+                "operationId": "validate",
+                "parameters": [
+                    {
+                        "name": "url",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/youtube/oauth/callback": {
+            "get": {
+                "tags": [
+                    "YouTube"
+                ],
+                "operationId": "callback",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "state",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "error",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/youtube/connection": {
+            "get": {
+                "tags": [
+                    "YouTube"
+                ],
+                "operationId": "connection",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ConnectionStatus"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "YouTube"
+                ],
+                "summary": "Disconnect YouTube and revoke the access grant at Google",
+                "operationId": "disconnect",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/illustrations/{id}/svg": {
+            "get": {
+                "tags": [
+                    "Illustrations"
+                ],
+                "operationId": "svg",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "image/svg+xml": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/illustrations/{id}/image": {
+            "get": {
+                "tags": [
+                    "Illustrations"
+                ],
+                "operationId": "image",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "byte"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/history": {
+            "get": {
+                "tags": [
+                    "Learning history"
+                ],
+                "summary": "Your library of analyzed videos, most recent first",
+                "operationId": "list_2",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 0
+                        }
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32",
+                            "default": 12
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PageResponseHistoryItem"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/history/stats": {
+            "get": {
+                "tags": [
+                    "Learning history"
+                ],
+                "operationId": "stats",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Stats"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/config": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Public feature flags for clients",
+                "operationId": "config",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicConfig"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{id}": {
+            "get": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "summary": "Full learning content for an analysis",
+                "operationId": "detail",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DetailDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{id}/status": {
+            "get": {
+                "tags": [
+                    "Videos & analyses"
+                ],
+                "summary": "Lightweight processing status for polling",
+                "operationId": "status",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StatusDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/analyses/{analysisId}/notes/pdf": {
+            "get": {
+                "tags": [
+                    "Notes"
+                ],
+                "operationId": "pdf",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/pdf": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "byte"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/stats": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "operationId": "stats_1",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Stats"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/history/{analysisId}": {
+            "delete": {
+                "tags": [
+                    "Learning history"
+                ],
+                "summary": "Remove a video from your library",
+                "operationId": "remove",
+                "parameters": [
+                    {
+                        "name": "analysisId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/bookmarks/{id}": {
+            "delete": {
+                "tags": [
+                    "Bookmarks"
+                ],
+                "operationId": "delete_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ProgressUpdate": {
+                "type": "object",
+                "properties": {
+                    "completedChapterIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    "lastPositionSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "Progress": {
+                "type": "object",
+                "properties": {
+                    "progressPercent": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "completedChapterIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    "lastPositionSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "SaveNoteRequest": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "string",
+                        "maxLength": 200000,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "content"
+                ]
+            },
+            "NoteDto": {
+                "type": "object",
+                "properties": {
+                    "content": {
+                        "type": "string"
+                    },
+                    "edited": {
+                        "type": "boolean"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "AnalyzeRequest": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "maxLength": 2048,
+                        "minLength": 0
+                    },
+                    "forceNew": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "url"
+                ]
+            },
+            "StatusDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "PENDING",
+                            "FETCHING_TRANSCRIPT",
+                            "AWAITING_TRANSCRIPT",
+                            "PROCESSING",
+                            "GENERATING_EXPLANATION",
+                            "GENERATING_ILLUSTRATIONS",
+                            "COMPLETED",
+                            "FAILED"
+                        ]
+                    },
+                    "progress": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "statusMessage": {
+                        "type": "string"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "category": {
+                        "type": "string"
+                    },
+                    "transcriptSource": {
+                        "type": "string",
+                        "enum": [
+                            "YOUTUBE_CAPTIONS",
+                            "USER_PASTE",
+                            "USER_UPLOAD",
+                            "AUDIO_TRANSCRIPTION"
+                        ]
+                    },
+                    "canSubmitTranscript": {
+                        "type": "boolean"
+                    },
+                    "canRetry": {
+                        "type": "boolean"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "SubmitResponse": {
+                "type": "object",
+                "properties": {
+                    "analysis": {
+                        "$ref": "#/components/schemas/StatusDto"
+                    },
+                    "video": {
+                        "$ref": "#/components/schemas/VideoDto"
+                    },
+                    "reused": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "VideoDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "youtubeId": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "channelTitle": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "thumbnailUrl": {
+                        "type": "string"
+                    },
+                    "durationSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "publishedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "SubmitAttemptRequest": {
+                "type": "object",
+                "properties": {
+                    "answers": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "maxItems": 50,
+                        "minItems": 0
+                    }
+                },
+                "required": [
+                    "answers"
+                ]
+            },
+            "AttemptResult": {
+                "type": "object",
+                "properties": {
+                    "attempt": {
+                        "$ref": "#/components/schemas/AttemptSummary"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/QuestionResult"
+                        }
+                    }
+                }
+            },
+            "AttemptSummary": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "score": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "total": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "percent": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "QuestionResult": {
+                "type": "object",
+                "properties": {
+                    "questionId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "selectedIndex": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "correctIndex": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "correct": {
+                        "type": "boolean"
+                    },
+                    "explanation": {
+                        "type": "string"
+                    },
+                    "timestampSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "CreateBookmarkRequest": {
+                "type": "object",
+                "properties": {
+                    "analysisId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "chapterId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestampSeconds": {
+                        "type": "integer",
+                        "format": "int32",
+                        "minimum": 0
+                    },
+                    "title": {
+                        "type": "string",
+                        "maxLength": 300,
+                        "minLength": 0
+                    },
+                    "note": {
+                        "type": "string",
+                        "maxLength": 2000,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "analysisId",
+                    "title"
+                ]
+            },
+            "BookmarkDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "analysisId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "chapterId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "timestampSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string"
+                    },
+                    "videoTitle": {
+                        "type": "string"
+                    },
+                    "youtubeId": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "RegisterRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 320,
+                        "minLength": 0
+                    },
+                    "password": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "minLength": 8
+                    },
+                    "displayName": {
+                        "type": "string",
+                        "maxLength": 120,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "displayName",
+                    "email",
+                    "password"
+                ]
+            },
+            "AuthResponse": {
+                "type": "object",
+                "properties": {
+                    "accessToken": {
+                        "type": "string"
+                    },
+                    "expiresIn": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/UserDto"
+                    }
+                }
+            },
+            "UserDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "displayName": {
+                        "type": "string"
+                    },
+                    "avatarUrl": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "GUEST",
+                            "USER",
+                            "ADMIN"
+                        ]
+                    },
+                    "authProvider": {
+                        "type": "string",
+                        "enum": [
+                            "LOCAL",
+                            "GOOGLE",
+                            "GUEST"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "RefreshRequest": {
+                "type": "object",
+                "properties": {
+                    "refreshToken": {
+                        "type": "string",
+                        "maxLength": 512,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "refreshToken"
+                ]
+            },
+            "LoginRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "minLength": 1
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 1
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            },
+            "GoogleSignInRequest": {
+                "type": "object",
+                "properties": {
+                    "idToken": {
+                        "type": "string",
+                        "maxLength": 8192,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "idToken"
+                ]
+            },
+            "TranscriptTextRequest": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "maxLength": 1500000,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "text"
+                ]
+            },
+            "QuestionDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "position": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "MULTIPLE_CHOICE",
+                            "TRUE_FALSE",
+                            "CODE"
+                        ]
+                    },
+                    "question": {
+                        "type": "string"
+                    },
+                    "codeSnippet": {
+                        "type": "string"
+                    },
+                    "options": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "timestampSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "QuizDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "analysisId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "questions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/QuestionDto"
+                        }
+                    },
+                    "bestAttempt": {
+                        "$ref": "#/components/schemas/AttemptSummary"
+                    },
+                    "attemptCount": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "FlashcardDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "position": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "question": {
+                        "type": "string"
+                    },
+                    "answer": {
+                        "type": "string"
+                    },
+                    "definition": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AskRequest": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "maxLength": 2000,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "message"
+                ]
+            },
+            "MessageDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "role": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "citations": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "UpdateProfileRequest": {
+                "type": "object",
+                "properties": {
+                    "displayName": {
+                        "type": "string",
+                        "maxLength": 120,
+                        "minLength": 0
+                    }
+                },
+                "required": [
+                    "displayName"
+                ]
+            },
+            "ConnectionStatus": {
+                "type": "object",
+                "properties": {
+                    "enabled": {
+                        "type": "boolean"
+                    },
+                    "connected": {
+                        "type": "boolean"
+                    },
+                    "accountName": {
+                        "type": "string"
+                    },
+                    "scopes": {
+                        "type": "string"
+                    },
+                    "connectedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "HistoryItem": {
+                "type": "object",
+                "properties": {
+                    "analysisId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "youtubeId": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "channelTitle": {
+                        "type": "string"
+                    },
+                    "thumbnailUrl": {
+                        "type": "string"
+                    },
+                    "durationSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "PENDING",
+                            "FETCHING_TRANSCRIPT",
+                            "AWAITING_TRANSCRIPT",
+                            "PROCESSING",
+                            "GENERATING_EXPLANATION",
+                            "GENERATING_ILLUSTRATIONS",
+                            "COMPLETED",
+                            "FAILED"
+                        ]
+                    },
+                    "category": {
+                        "type": "string"
+                    },
+                    "progressPercent": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "lastPositionSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "lastAccessedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "PageResponseHistoryItem": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HistoryItem"
+                        }
+                    },
+                    "page": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalItems": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "hasNext": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "Stats": {
+                "type": "object",
+                "properties": {
+                    "videos": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "completedVideos": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "quizAttempts": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "averageQuizScore": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "bookmarks": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "notes": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "categories": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                }
+            },
+            "PageResponseBookmarkDto": {
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BookmarkDto"
+                        }
+                    },
+                    "page": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalItems": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "hasNext": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "PublicConfig": {
+                "type": "object",
+                "properties": {
+                    "googleSignInEnabled": {
+                        "type": "boolean"
+                    },
+                    "googleWebClientId": {
+                        "type": "string"
+                    },
+                    "youtubeConnectEnabled": {
+                        "type": "boolean"
+                    },
+                    "aiConfigured": {
+                        "type": "boolean"
+                    },
+                    "aiProvider": {
+                        "type": "string"
+                    },
+                    "audioTranscriptionEnabled": {
+                        "type": "boolean"
+                    },
+                    "imageGenerationEnabled": {
+                        "type": "boolean"
+                    },
+                    "maxTranscriptUploadBytes": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "maxAudioUploadBytes": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ChapterDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "position": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "startSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "endSeconds": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "shortSummary": {
+                        "type": "string"
+                    },
+                    "simpleExplanation": {
+                        "type": "string"
+                    },
+                    "detailedExplanation": {
+                        "type": "string"
+                    },
+                    "realWorldExample": {
+                        "type": "string"
+                    },
+                    "practicalUseCase": {
+                        "type": "string"
+                    },
+                    "keyPoints": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "concepts": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "DetailDto": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "$ref": "#/components/schemas/StatusDto"
+                    },
+                    "video": {
+                        "$ref": "#/components/schemas/VideoDto"
+                    },
+                    "overview": {
+                        "$ref": "#/components/schemas/JsonNode"
+                    },
+                    "beginnerExplanation": {
+                        "type": "string"
+                    },
+                    "technicalExplanation": {
+                        "type": "string"
+                    },
+                    "concepts": {
+                        "$ref": "#/components/schemas/JsonNode"
+                    },
+                    "summaries": {
+                        "$ref": "#/components/schemas/Summaries"
+                    },
+                    "chapters": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ChapterDto"
+                        }
+                    },
+                    "illustrations": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/IllustrationDto"
+                        }
+                    },
+                    "progress": {
+                        "$ref": "#/components/schemas/Progress"
+                    },
+                    "transcriptTimed": {
+                        "type": "boolean"
+                    },
+                    "aiModel": {
+                        "type": "string"
+                    }
+                }
+            },
+            "IllustrationDto": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "chapterId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "position": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "explanation": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "type": "string"
+                    },
+                    "svg": {
+                        "type": "string"
+                    },
+                    "hasImage": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "JsonNode": {},
+            "Summaries": {
+                "type": "object",
+                "properties": {
+                    "oneMinute": {
+                        "type": "string"
+                    },
+                    "fiveMinute": {
+                        "type": "string"
+                    },
+                    "detailed": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TranscriptSegment": {
+                "type": "object",
+                "properties": {
+                    "start": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "end": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "text": {
+                        "type": "string"
+                    }
+                }
+            },
+            "TranscriptView": {
+                "type": "object",
+                "properties": {
+                    "source": {
+                        "type": "string",
+                        "enum": [
+                            "YOUTUBE_CAPTIONS",
+                            "USER_PASTE",
+                            "USER_UPLOAD",
+                            "AUDIO_TRANSCRIPTION"
+                        ]
+                    },
+                    "language": {
+                        "type": "string"
+                    },
+                    "timed": {
+                        "type": "boolean"
+                    },
+                    "segments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TranscriptSegment"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

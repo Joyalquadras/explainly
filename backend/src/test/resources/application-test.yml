@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:explainly;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: none
+explainly:
+  security:
+    jwt-secret: test-secret-test-secret-test-secret-0123456789
+  rate-limit:
+    enabled: false
+  limits:
+    analyses-per-day-guest: 50
+  ai:
+    provider: scripted
+    anthropic:
+      api-key: ""
+    openai:
+      api-key: ""

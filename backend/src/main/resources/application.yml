@@ -1,0 +1,104 @@
+spring:
+  application:
+    name: explainly
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/explainly}
+    username: ${DATABASE_USERNAME:explainly}
+    password: ${DATABASE_PASSWORD:explainly}
+    hikari:
+      maximum-pool-size: ${DATABASE_POOL_SIZE:10}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc.time_zone: UTC
+        default_batch_fetch_size: 50
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 26MB
+      max-request-size: 27MB
+  threads:
+    virtual:
+      enabled: true
+
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+  error:
+    include-stacktrace: never
+    include-message: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.explainly: ${LOG_LEVEL:INFO}
+
+explainly:
+  web-app-url: ${APP_WEB_URL:http://localhost:5173}
+  security:
+    jwt-secret: ${JWT_SECRET:}
+    access-token-ttl: ${JWT_ACCESS_TTL:30m}
+    refresh-token-ttl: ${JWT_REFRESH_TTL:30d}
+    token-encryption-key: ${TOKEN_ENCRYPTION_KEY:}
+    cors-allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:8081,http://localhost:19006}
+    allowed-redirect-prefixes: ${OAUTH_ALLOWED_REDIRECT_PREFIXES:http://localhost:5173,explainly://}
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    general-per-minute: ${RATE_LIMIT_GENERAL_PER_MINUTE:240}
+    ai-per-minute: ${RATE_LIMIT_AI_PER_MINUTE:12}
+    auth-per-minute: ${RATE_LIMIT_AUTH_PER_MINUTE:20}
+  limits:
+    analyses-per-day-user: ${LIMIT_ANALYSES_PER_DAY_USER:30}
+    analyses-per-day-guest: ${LIMIT_ANALYSES_PER_DAY_GUEST:3}
+    max-transcript-chars: ${LIMIT_MAX_TRANSCRIPT_CHARS:1500000}
+    max-transcript-upload-bytes: ${LIMIT_MAX_TRANSCRIPT_UPLOAD_BYTES:5242880}
+    max-audio-upload-bytes: ${LIMIT_MAX_AUDIO_UPLOAD_BYTES:26214400}
+  google:
+    # Comma-separated OAuth client IDs accepted as the audience of Google ID tokens (web, iOS, Android).
+    client-ids: ${GOOGLE_CLIENT_IDS:}
+    # Web client used for the server-side YouTube authorization-code flow.
+    oauth-client-id: ${GOOGLE_OAUTH_CLIENT_ID:}
+    oauth-client-secret: ${GOOGLE_OAUTH_CLIENT_SECRET:}
+    oauth-redirect-uri: ${GOOGLE_OAUTH_REDIRECT_URI:http://localhost:8080/api/youtube/oauth/callback}
+  youtube:
+    api-key: ${YOUTUBE_API_KEY:}
+  ai:
+    provider: ${AI_PROVIDER:anthropic}
+    max-direct-transcript-chars: ${AI_MAX_DIRECT_TRANSCRIPT_CHARS:600000}
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY:}
+      base-url: ${ANTHROPIC_API_BASE_URL:https://api.anthropic.com}
+      model: ${ANTHROPIC_MODEL:claude-opus-5-5}
+      effort: ${ANTHROPIC_EFFORT:medium}
+      server-fallbacks: ${ANTHROPIC_SERVER_FALLBACKS:true}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+      model: ${OPENAI_MODEL:gpt-4.1}
+      json-mode: ${OPENAI_JSON_MODE:true}
+    images:
+      enabled: ${AI_IMAGES_ENABLED:false}
+      model: ${OPENAI_IMAGE_MODEL:gpt-image-1}
+      max-per-video: ${AI_IMAGES_MAX_PER_VIDEO:2}
+    transcription:
+      enabled: ${AUDIO_TRANSCRIPTION_ENABLED:false}
+      model: ${OPENAI_TRANSCRIPTION_MODEL:whisper-1}
