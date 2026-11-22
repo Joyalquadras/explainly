@@ -122,3 +122,15 @@ Other providers can be added by implementing `TranscriptProvider`.
 - Set `springdoc.api-docs.enabled=false` if the API docs shouldn't be public.
 - The rate limiter keeps its state in memory. If you run more than one backend instance, move the buckets to Redis. The analysis pipeline already survives restarts because its state is in the database.
 - Mobile releases: `npx eas-cli@latest build` with `EXPO_PUBLIC_API_BASE_URL` pointing at your HTTPS API.
+
+## Demo video and screenshots
+
+`scripts/demo-capture` records a demo video (MP4) and screenshots of a running instance, for example for LinkedIn, a portfolio or this README:
+
+```bash
+cd scripts/demo-capture
+npm install && npx playwright install chromium
+APP_URL=http://localhost:8088 VIDEO_URL="https://www.youtube.com/watch?v=..." TRANSCRIPT_FILE=./transcript.txt node capture.mjs
+```
+
+It analyzes the video first (not recorded), then records a clean walkthrough with no waiting. Output goes to `output/`. Install `ffmpeg` to get MP4 automatically.

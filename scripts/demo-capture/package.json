@@ -1,0 +1,12 @@
+{
+  "name": "explainly-demo-capture",
+  "private": true,
+  "type": "module",
+  "description": "Records a demo video and screenshots of a running Explainly instance for sharing (LinkedIn, README, portfolio).",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.56.0"
+  }
+}
